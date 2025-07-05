@@ -7,7 +7,7 @@ x-common:
     MYSQL_ROOT_PASSWORD: "your_strong_root_password"
   panel:
     &panel-environment
-    APP_URL: "http://198.23.57.17"
+    APP_URL: "https://mtahost.infy.uk"
     APP_TIMEZONE: "UTC"
     APP_SERVICE_AUTHOR: "noreply@yourdomain.com"
     TRUSTED_PROXIES: "*"
