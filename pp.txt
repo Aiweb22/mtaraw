@@ -1,19 +1,30 @@
+#!/bin/bash
+# Made by unnamed
+
+echo "📦 Installing Pterodactyl Panel with Docker..."
+
+# Step 1: Create directory structure
+mkdir -p pterodactyl/panel
+cd pterodactyl/panel || exit
+
+# Step 2: Create docker-compose.yml file
+cat <<EOF > docker-compose.yml
 version: '3.8'
 
 x-common:
   database:
     &db-environment
-    MYSQL_PASSWORD: "your_strong_db_password"
-    MYSQL_ROOT_PASSWORD: "your_strong_root_password"
+    MYSQL_PASSWORD: &db-password "CHANGE_ME"
+    MYSQL_ROOT_PASSWORD: "CHANGE_ME_TOO"
   panel:
     &panel-environment
-    APP_URL: "https://mtahost.infy.uk"
+    APP_URL: "http://198.23.57.17"
     APP_TIMEZONE: "UTC"
-    APP_SERVICE_AUTHOR: "noreply@yourdomain.com"
+    APP_SERVICE_AUTHOR: "noreply@example.com"
     TRUSTED_PROXIES: "*"
   mail:
     &mail-environment
-    MAIL_FROM: "noreply@yourdomain.com"
+    MAIL_FROM: "noreply@example.com"
     MAIL_DRIVER: "smtp"
     MAIL_HOST: "mail"
     MAIL_PORT: "1025"
@@ -43,7 +54,7 @@ services:
     ports:
       - "80:80"
       - "443:443"
-    depends_on:
+    links:
       - database
       - cache
     volumes:
@@ -53,8 +64,9 @@ services:
       - "/srv/pterodactyl/logs/:/app/storage/logs"
     environment:
       <<: [*panel-environment, *mail-environment]
-      DB_PASSWORD: "your_strong_db_password"
+      DB_PASSWORD: *db-password
       APP_ENV: "production"
+      APP_ENVIRONMENT_ONLY: "false"
       CACHE_DRIVER: "redis"
       SESSION_DRIVER: "redis"
       QUEUE_DRIVER: "redis"
@@ -67,3 +79,14 @@ networks:
     ipam:
       config:
         - subnet: 172.20.0.0/16
+EOF
+
+# Step 3: Start Docker containers
+docker-compose up -d
+
+echo "✅ Pterodactyl Panel installation complete!"
+echo "🌐 Access your panel at: http://198.23.57.17 or 198.23.57.17"
+echo "🌐 Access your panel at port 80: http://198.23.57.17:80 or 198.23.57.17:80"
+
+# Step 4: Create an admin user for the Panel
+docker-compose run --rm panel php artisan p:user:make
