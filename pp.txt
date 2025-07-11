@@ -18,7 +18,7 @@ x-common:
     MYSQL_ROOT_PASSWORD: "CHANGE_ME_TOO"
   panel:
     &panel-environment
-    APP_URL: "https://server5.webhostmost.com"
+    APP_URL: "http://panel.ghotp.xyz"
     APP_TIMEZONE: "UTC"
     APP_SERVICE_AUTHOR: "noreply@example.com"
     TRUSTED_PROXIES: "*"
